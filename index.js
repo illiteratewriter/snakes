@@ -9,10 +9,21 @@ let snake = [
 ];
 let interval;
 let score = 0;
+let highScore = parseInt(localStorage.getItem('snakeHighScore')) || 0;
 let foodLocation = {
   x: 1,
   y: 1,
 };
+
+const rainbowColors = [
+  '#ec2127', // red
+  '#ff6b35', // orange
+  '#f7931e', // yellow-orange
+  '#fdc82f', // yellow
+  '#8cc63f', // green
+  '#00aeef', // blue
+  '#92278f'  // purple
+];
 
 function getRandomArbitrary(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -38,6 +49,10 @@ function renderSnake() {
     snakePiece.setAttribute("class", "snake");
     snakePiece.style.gridRow = piece.x;
     snakePiece.style.gridColumn = piece.y;
+    // Rainbow effect based on position in snake
+    const colorIndex = id % rainbowColors.length;
+    snakePiece.style.backgroundColor = rainbowColors[colorIndex];
+    snakePiece.style.boxShadow = `0 0 ${id === 0 ? '10' : '5'}px ${rainbowColors[colorIndex]}`;
     document.getElementById("board").appendChild(snakePiece);
   });
 }
@@ -126,6 +141,11 @@ function checkCollision() {
     if (piece.x === head.x && piece.y === head.y) {
       clearInterval(interval);
       gameState = "GAMEOVER";
+      // Update high score
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('snakeHighScore', highScore.toString());
+      }
     }
   });
 }
@@ -142,12 +162,13 @@ function pauseGame() {
 }
 
 function renderScore() {
+  const scoreElement = document.getElementById("score");
   if (gameState === "GAMEOVER") {
-    document.getElementById(
-      "score"
-    ).innerHTML = `GAME OVER !!! SCORE: ${score}`;
+    scoreElement.innerHTML = `GAME OVER !!! SCORE: ${score} | HIGH SCORE: ${highScore}`;
+    scoreElement.classList.add("gameover");
   } else {
-    document.getElementById("score").innerHTML = `SCORE: ${score}`;
+    scoreElement.innerHTML = `SCORE: ${score} | HIGH SCORE: ${highScore}`;
+    scoreElement.classList.remove("gameover");
   }
 }
 

@@ -19,6 +19,12 @@ html {
 .snake {
   background-color: #ec2127;
   border-radius: 4px;
+  transition: all 0.05s ease;
+  box-shadow: 0 0 5px rgba(236, 33, 39, 0.5);
+}
+
+.snake:first-child {
+  box-shadow: 0 0 10px rgba(236, 33, 39, 0.8);
 }
 
 #board {
@@ -35,7 +41,19 @@ html {
 
 #food {
   background-color: #000000;
-  border-radius: 4px;
+  border-radius: 50%;
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.8);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+  }
 }
 
 #container {
@@ -45,4 +63,24 @@ html {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+#score {
+  margin-top: 20px;
+  font-size: 24px;
+  letter-spacing: 2px;
+}
+
+.gameover {
+  animation: gameOverPulse 1s ease-in-out infinite;
+  color: #ec2127;
+}
+
+@keyframes gameOverPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
